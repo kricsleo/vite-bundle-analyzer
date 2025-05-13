@@ -89,7 +89,7 @@ function analyzer(opts?: AnalyzerPluginOptions) {
   let hasViteReporter = true
   let logger: Logger
   let workspaceRoot = process.cwd()
-  const preferLivingServer = opts.analyzerMode === 'server' || opts.analyzerMode === 'static'
+  const preferLivingServer = !isCI && (opts.analyzerMode === 'server' || opts.analyzerMode === 'static')
   const preferSilent = opts.analyzerMode === 'json' || opts.analyzerMode === 'static'
 
   const b = arena()
@@ -233,7 +233,7 @@ function analyzer(opts?: AnalyzerPluginOptions) {
         server.listen(port, () => {
           console.log('server run on ', ansis.hex('#5B45DE')(`http://localhost:${port}`))
         })
-        if (('openAnalyzer' in opts ? opts.openAnalyzer : true) && !isCI) {
+        if ('openAnalyzer' in opts ? opts.openAnalyzer : true) {
           const address = `http://localhost:${port}`
           openBrowser(address)
         }
